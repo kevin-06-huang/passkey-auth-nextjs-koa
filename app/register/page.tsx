@@ -9,7 +9,7 @@ export default function Register() {
   const username = useRef<HTMLInputElement>(null);
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    fetch("http://localhost:4000/register/generate", {
+    fetch("http://localhost:3500/register/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

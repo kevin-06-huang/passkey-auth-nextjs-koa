@@ -13,6 +13,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@koa/cors": "^4.0.0",
     "@prisma/client": "^5.0.0",
     "@simplewebauthn/browser": "^7.2.0",
     "@simplewebauthn/server": "^7.3.1",
@@ -20,8 +21,12 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "dotenv": "^16.3.1",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^12.0.0",
     "next": "13.4.10",
     "postcss": "8.4.26",
     "react": "18.2.0",
@@ -31,6 +36,10 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@types/koa": "^2.13.6",
+    "@types/koa__cors": "^4.0.0",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-router": "^7.4.4",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "prisma": "^5.0.0",

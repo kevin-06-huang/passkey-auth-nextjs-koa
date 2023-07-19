@@ -7,11 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model UserModel {
+model User {
   id                String   @id @default(uuid())
   username          String
   currentChallenge  String?  // Optional field
   Authenticator     Authenticator[]
+
+  @@map(name: "users")
 }
 
 model Authenticator {
@@ -23,7 +25,9 @@ model Authenticator {
   credentialBackedUp    Boolean                // `BOOL` or whatever similar type is supported
   transports            String?                // Optional field, `VARCHAR(255)` and store string array as a CSV string
   UserId                String
-  User                  UserModel              @relation(fields: [UserId], references: [id])
+  User                  User                   @relation(fields: [UserId], references: [id])
+  
+  @@map(name: "authenticators")
 }
 
 enum CredentialDeviceType {
