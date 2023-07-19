@@ -22,7 +22,7 @@ export default function Register() {
 
       const opts = await (await res).json();
       const verifyReqBody = await startRegistration(opts);
-      (verifyReqBody as any)["userId"] = opts.user.id;
+      (verifyReqBody as any)["userID"] = opts.user.id;
 
       const verifyResp = await fetch("http://localhost:3500/register/verify", {
         method: "POST",
