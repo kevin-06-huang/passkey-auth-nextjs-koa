@@ -33,8 +33,12 @@ export default function Register() {
       });
       
       const verifyJSON = await (await verifyResp).json();
-      console.log(verifyJSON);
-      //router.push("/login");
+
+      if (verifyJSON && verifyJSON.verified) {
+        router.push("/login");
+      } else {
+        alert(verifyJSON.status);
+      }
     } catch (err) {
       console.error(err);
     }
