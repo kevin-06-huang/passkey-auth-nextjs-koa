@@ -4,11 +4,13 @@ import { KoaRequestBody } from "@/types";
 
 import { 
   generateRegistrationOptions,
-  verifyRegistrationResponse
+  verifyRegistrationResponse,
+  generateAuthenticationOptions,
 } from "@simplewebauthn/server";
 import type {
   GenerateRegistrationOptionsOpts,
   VerifyRegistrationResponseOpts,
+  GenerateAuthenticationOptionsOpts,
 } from "@simplewebauthn/server";
 import type { RegistrationResponseJSON, AuthenticatorDevice } from "@simplewebauthn/typescript-types";
 
@@ -39,6 +41,7 @@ const RegisterUser = async (ctx: Koa.Context) => {
 
     const options = generateRegistrationOptions(opts);
     challenges[user.id] = options.challenge;
+
     ctx.status = 200;
     ctx.body = options;
   } catch (err) {
@@ -97,8 +100,26 @@ const LoginUser = async (ctx: Koa.Context) => {
       ctx.status = 404;
       ctx.body = { status: "fail to find user" };
     } else {
-      const authDevice = await prisma.authenticator.findFirst({ where: { UserId: user.id, } })
-      console.log(authDevice);
+      const authDevice = await prisma.authenticator.findFirst({ where: { UserId: user.id, } });
+      const credentialID = new Uint8Array(authDevice!.credentialID);
+      const transports = JSON.parse(authDevice!.transports as string);
+      
+      const opts: GenerateAuthenticationOptionsOpts = {
+        timeout: 60000,
+        allowCredentials: [{
+          id: credentialID,
+          type: 'public-key',
+          transports: transports,
+        }],
+        userVerification: 'required',
+        rpID: "localhost",
+      };
+
+      const options = generateAuthenticationOptions(opts);
+      challenges[user.id] = options.challenge;
+
+      ctx.status = 200;
+      ctx.body = options;
     }
   } catch (err) {
     ctx.status = 409;

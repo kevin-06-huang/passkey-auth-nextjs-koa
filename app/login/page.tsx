@@ -1,12 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useStore from "@/store/auth";
 import { useRef } from "react";
+import { startAuthentication } from "@simplewebauthn/browser";
 
 export default function Login() {
   const router = useRouter();
-  const store = useStore();
   const username = useRef<HTMLInputElement>(null);
   const handleSubmit = async (event: React.FormEvent) => {
     try {
@@ -22,7 +21,18 @@ export default function Login() {
       });
       
       const opts = await (await res).json();
-      console.log(opts);
+      const verifyReqBody = await startAuthentication(opts);
+
+      const verificationResp = await fetch('http://localhost:3500/login/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(verifyReqBody),
+      });
+
+      const verifyJSON = await (await verificationResp).json();
+      console.log(verifyJSON);
     } catch (err) {
       console.error(err);
     }
