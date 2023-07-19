@@ -2,23 +2,42 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
-import { startRegistration } from '@simplewebauthn/browser';
+import { startRegistration } from "@simplewebauthn/browser";
 
 export default function Register() {
   const router = useRouter();
   const username = useRef<HTMLInputElement>(null);
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    fetch("http://localhost:3500/register/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username.current!.value,
-      }),
-    });
-    //router.push("/login");
+  const handleSubmit = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
+      const res = fetch("http://localhost:3500/register/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username.current!.value,
+        }),
+      });
+
+      const opts = await (await res).json();
+      const verifyReqBody = await startRegistration(opts);
+      (verifyReqBody as any)["userId"] = opts.user.id;
+
+      const verifyResp = await fetch("http://localhost:3500/register/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(verifyReqBody),
+      });
+      
+      const verifyJSON = await (await verifyResp).json();
+      console.log(verifyJSON);
+      //router.push("/login");
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <section className="bg-ct-blue-600 min-h-screen">
