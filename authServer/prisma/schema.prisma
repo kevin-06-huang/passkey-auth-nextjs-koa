@@ -20,7 +20,7 @@ model Authenticator {
   id                    String                 @id @default(uuid())
   credentialID          Bytes                  // Encoded to base64url then stored as `TEXT`
   credentialPublicKey   Bytes                  // Stored raw bytes as `BYTEA`/`BLOB`/etc...
-  counter               BigInt                 // Consider `BIGINT` since some authenticators return atomic timestamps as counters
+  counter               Int                    // Consider `BIGINT` since some authenticators return atomic timestamps as counters
   transports            Json                   // Optional field, `VARCHAR(255)` and store string array as a CSV string
   UserId                String
   User                  User                   @relation(fields: [UserId], references: [id])

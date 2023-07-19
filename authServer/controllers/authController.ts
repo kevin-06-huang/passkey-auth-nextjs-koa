@@ -74,7 +74,7 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
       expectedRPID: "localhost",
       requireUserVerification: true,
     };
-    
+
     const verification = await verifyRegistrationResponse(opts);
     const { verified, registrationInfo } = verification;
     
@@ -161,17 +161,18 @@ const VerifyUser = async (ctx: Koa.Context) => {
     const { verified, authenticationInfo } = verification;
 
     if (verified) {
-      // Update the authenticator's counter in the DB to the newest count in the authentication
-      //dbAuthenticator.counter = authenticationInfo.newCounter;
-      console.log(authDevice);
-      console.log(authenticationInfo);
-      // const test = await prisma.authenticator.update({
-      //   where: { UserId: userID },
-      //   data: {
-      //     counter: authenticationInfo.newCounter,
-      //   },
-      // });
-      // console.log(test);
+      await prisma.authenticator.updateMany({
+        where: { credentialID: Buffer.from(authDevice.credentialID)  },
+        data: {
+          counter: authenticationInfo.newCounter,
+        },
+      });
+
+      delete challenges[userID!];
+      delete devices[userID!];
+
+      ctx.status = 200;
+      ctx.body = { verified };
     }
   } catch (err) {
     ctx.status = 409;

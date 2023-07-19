@@ -32,7 +32,12 @@ export default function Login() {
       });
 
       const verifyJSON = await (await verificationResp).json();
-      console.log(verifyJSON);
+      
+      if (verifyJSON && verifyJSON.verified) {
+        router.push("/profile");
+      } else {
+        alert(verifyJSON.status);
+      }
     } catch (err) {
       console.error(err);
     }
