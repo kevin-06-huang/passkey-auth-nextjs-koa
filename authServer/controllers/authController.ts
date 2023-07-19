@@ -22,11 +22,8 @@ import type {
   AuthenticatorDevice,
 } from "@simplewebauthn/typescript-types";
 
-type Challenge = Record<string, string>;
-type Device = Record<string, AuthenticatorDevice>;
-
-const challenges: Challenge = {};
-const devices: Device = {};
+const challenges: Record<string, string> = {};
+const devices: Record<string, AuthenticatorDevice> = {};
 
 const RegisterUser = async (ctx: Koa.Context) => {
   try {
