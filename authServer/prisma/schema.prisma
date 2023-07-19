@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserModel {
+  id                String   @id @default(uuid())
+  username          String
+  currentChallenge  String?  // Optional field
+  Authenticator     Authenticator[]
+}
+
+model Authenticator {
+  id                    String                 @id @default(uuid())
+  credentialID          String                 @db.Text // Encoded to base64url then stored as `TEXT`
+  credentialPublicKey   Bytes                  // Stored raw bytes as `BYTEA`/`BLOB`/etc...
+  counter               BigInt                 // Consider `BIGINT` since some authenticators return atomic timestamps as counters
+  credentialDeviceType  CredentialDeviceType
+  credentialBackedUp    Boolean                // `BOOL` or whatever similar type is supported
+  transports            String?                // Optional field, `VARCHAR(255)` and store string array as a CSV string
+  UserId                String
+  User                  UserModel              @relation(fields: [UserId], references: [id])
+}
+
+enum CredentialDeviceType {
+  singleDevice
+  multiDevice
+}
+
+enum AuthenticatorTransport {
+  usb
+  ble
+  nfc
+  internal
+}
