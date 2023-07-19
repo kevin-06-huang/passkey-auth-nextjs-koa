@@ -51,7 +51,6 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
   try {
     const body: RegistrationResponseJSON = ctx.request.body as RegistrationResponseJSON;
     const { userId } = body as any;
-    delete (body as any).userId
     const challenge = challenges[userId];
     
     const opts: VerifyRegistrationResponseOpts = {
@@ -67,32 +66,25 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
     
     if (verified && registrationInfo) {
       const { credentialPublicKey, credentialID, counter } = registrationInfo;
-  
-      const newDevice: AuthenticatorDevice = {
-        credentialPublicKey,
-        credentialID,
-        counter,
-        transports: body.response.transports,
-      };
-      console.log(credentialPublicKey)
-      // await prisma.authenticator.create({
-      //   data: {
-      //     credentialPublicKey,
-      //     credentialID,
-      //     counter,
-      //     transports: body.response.transports,
-      //     userId
-      //   },
-      // });
-      //user.devices.push(newDevice);
+      
+      await prisma.authenticator.create({
+        data: {
+          credentialPublicKey: Buffer.from(credentialPublicKey.buffer),
+          credentialID: Buffer.from(credentialID.buffer),
+          counter,
+          transports: JSON.stringify(body.response.transports),
+          UserId: userId
+        }
+      });
+
+      delete challenges[userId];
+
+      ctx.status = 200;
+      ctx.body = { verified };
     }
-  
-    // req.session.currentChallenge = undefined;
-  
-    // res.send({ verified });
   } catch (err) {
     ctx.status = 409;
-    ctx.body = { status: "rejected" };
+    ctx.body = { status: err };
   }
 };
 
