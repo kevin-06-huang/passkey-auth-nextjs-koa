@@ -22,8 +22,8 @@ export default function Login() {
       
       const opts = await (await res).json();
       const verifyReqBody = await startAuthentication(opts);
-
-      const verificationResp = await fetch('http://localhost:3500/login/verify', {
+      
+      const verificationResp = await fetch("http://localhost:3500/login/verify", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

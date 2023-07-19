@@ -125,12 +125,22 @@ const LoginUser = async (ctx: Koa.Context) => {
     ctx.status = 409;
     ctx.body = { status: err };
   }
-}
+};
+
+const VerifyUser = async (ctx: Koa.Context) => {
+  try {
+    console.log(ctx.request.body);
+  } catch (err) {
+    ctx.status = 409;
+    ctx.body = { status: err };
+  }
+};
 
 const authController = {
   RegisterUser,
   VerifyRegistration,
   LoginUser,
+  VerifyUser,
 };
 
 export default authController;
