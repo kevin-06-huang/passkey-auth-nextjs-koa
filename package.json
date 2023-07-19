@@ -10,6 +10,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^7.2.0",
+    "@simplewebauthn/server": "^7.3.1",
     "@types/node": "20.4.2",
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
