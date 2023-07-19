@@ -91,7 +91,15 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
 const LoginUser = async (ctx: Koa.Context) => {
   try {
     const { username } = ctx.request.body as KoaRequestBody;
-    console.log(username);
+    const user = await prisma.user.findUnique({ where: { username } });
+
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = { status: "fail to find user" };
+    } else {
+      const authDevice = await prisma.authenticator.findFirst({ where: { UserId: user.id, } })
+      console.log(authDevice);
+    }
   } catch (err) {
     ctx.status = 409;
     ctx.body = { status: err };
