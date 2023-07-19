@@ -43,7 +43,7 @@ const RegisterUser = async (ctx: Koa.Context) => {
     ctx.body = options;
   } catch (err) {
     ctx.status = 409;
-    ctx.body = { status: "rejected" };
+    ctx.body = { status: err };
   }
 };
 
@@ -88,9 +88,20 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
   }
 };
 
+const LoginUser = async (ctx: Koa.Context) => {
+  try {
+    const { username } = ctx.request.body as KoaRequestBody;
+    console.log(username);
+  } catch (err) {
+    ctx.status = 409;
+    ctx.body = { status: err };
+  }
+}
+
 const authController = {
   RegisterUser,
   VerifyRegistration,
+  LoginUser,
 };
 
 export default authController;

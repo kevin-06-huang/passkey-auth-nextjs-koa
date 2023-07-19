@@ -11,7 +11,7 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent) => {
     try {
       event.preventDefault();
-      const res = fetch("http://localhost:3000/login", {
+      const res = fetch("http://localhost:3500/login/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,12 +20,9 @@ export default function Login() {
           username: username.current!.value,
         }),
       });
-      const resBody = await (await res).json();
-      if (!resBody.status) {
-        store.setAuthUser(resBody);
-        if (resBody.otp_enabled) router.push("/validateOtp");
-        else router.push("/profile");
-      } else alert(resBody.status);
+      
+      const opts = await (await res).json();
+      console.log(opts);
     } catch (err) {
       console.error(err);
     }
