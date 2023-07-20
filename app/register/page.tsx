@@ -44,9 +44,9 @@ export default function Register() {
     }
   };
   return (
-    <section className="bg-ct-blue-600 min-h-screen">
+    <section className="bg-ct-blue-600 min-h-screen bg-orange-600">
       <div className="max-w-4xl mx-auto bg-ct-dark-100 rounded-md h-[20rem] flex justify-center items-center">
-        <form className="font-semibold" onSubmit={handleSubmit}>
+        <form className="font-semibold font-comic" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username">Username:</label>
             <input

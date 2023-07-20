@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 justify-end">
       {!user ? (
-        <div className="flex-none">
+        <div className="flex-none font-comic">
           <ul className="menu menu-horizontal flex justify-end">
             <li>
               <Link href="/" className="m-2">
