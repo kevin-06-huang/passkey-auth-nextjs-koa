@@ -1,34 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 2FA Demo
 
-## Getting Started
+This is a demo project showcasing two-factor authentication (2FA) implementation using Next.js and Koa.
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+1. Clone the repository.
+2. Navigate to the project directory.
+3. Run `npm install` to install the project dependencies.
+4. Make a `.env` file at root directory and supply a Postgres database for the environment variable `DATABASE_URL`.
+5. Run `db:push` to apply the prisma schema to the Postgres database.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Run `npm run server` to start the backend server on port 3500.
+2. Run `npm run dev` to start the development server for Next.js on port 5500.
+3. Access the demo application in your web browser at `http://localhost:5500`.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project Structure
 
-## Learn More
+- `root directory`: Contains the client-side code and Next.js pages.
+- `authServer`: Contains the server-side code for authentication.
+- `prisma`: Contains the Prisma schema for database configuration.
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `dev`: Starts the development server on port 5000.
+- `build`: Builds the Next.js application.
+- `start`: Starts the Next.js production server.
+- `lint`: Lints the project files using ESLint.
+- `server`: Starts the authentication server using TypeScript and Koa.
+- `db:migrate`: Creates a new Prisma migration for the user entity.
+- `db:push`: Pushes the Prisma schema changes to the database.
+- `format`: Formats the project files using Prettier.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Dependencies
 
-## Deploy on Vercel
+- `@koa/cors`: Cross-origin resource sharing middleware for Koa.
+- `@prisma/client`: Prisma client for database access.
+- `@simplewebauthn/browser`: Browser library for WebAuthn support.
+- `@simplewebauthn/server`: Server library for WebAuthn support.
+- `@types/node`: TypeScript type definitions for Node.js.
+- `@types/react`: TypeScript type definitions for React.
+- `@types/react-dom`: TypeScript type definitions for ReactDOM.
+- `autoprefixer`: CSS post-processing tool.
+- `dotenv`: Loads environment variables from a `.env` file.
+- `eslint`: ESLint for code linting.
+- `eslint-config-next`: ESLint configuration for Next.js projects.
+- `koa`: Web framework for Koa.
+- `koa-bodyparser`: Middleware for parsing request bodies in Koa.
+- `koa-router`: Router middleware for Koa.
+- `next`: Next.js library.
+- `postcss`: CSS post-processing tool.
+- `react`: React library.
+- `react-dom`: ReactDOM library.
+- `tailwindcss`: CSS utility framework.
+- `typescript`: TypeScript language support.
+- `zustand`: State management library.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Development Dependencies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- `@types/koa`: TypeScript type definitions for Koa.
+- `@types/koa__cors`: TypeScript type definitions for Koa CORS.
+- `@types/koa-bodyparser`: TypeScript type definitions for Koa body parser.
+- `@types/koa-router`: TypeScript type definitions for Koa router.
+- `nodemon`: Monitor for changes in the development environment.
+- `prettier`: Code formatting tool.
+- `prettier-plugin-tailwindcss`: Prettier plugin for Tailwind CSS formatting.
+- `prisma`: Prisma migration and database management tool.
+- `ts-node`: TypeScript execution and REPL for Node.js.
