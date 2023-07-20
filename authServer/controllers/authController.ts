@@ -78,7 +78,6 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
     
     if (verified && registrationInfo) {
       const { credentialPublicKey, credentialID, counter } = registrationInfo;
-      console.log(typeof counter);
       
       await prisma.authenticator.create({
         data: {
