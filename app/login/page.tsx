@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import useStore from "@/store/auth";
 import { useRef } from "react";
 import { startAuthentication } from "@simplewebauthn/browser";
 
 export default function Login() {
   const router = useRouter();
+  const store = useStore();
   const username = useRef<HTMLInputElement>(null);
   const handleSubmit = async (event: React.FormEvent) => {
     try {
@@ -34,6 +36,7 @@ export default function Login() {
       const verifyJSON = await (await verificationResp).json();
       
       if (verifyJSON && verifyJSON.verified) {
+        store.setAuthUser(verifyJSON.user);
         router.push("/profile");
       } else {
         alert(verifyJSON.status);

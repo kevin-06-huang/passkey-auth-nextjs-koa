@@ -24,6 +24,7 @@ import type {
 
 const challenges: Record<string, string> = {};
 const devices: Record<string, AuthenticatorDevice> = {};
+const users: Record<string, string> = {};
 
 const RegisterUser = async (ctx: Koa.Context) => {
   try {
@@ -109,6 +110,8 @@ const LoginUser = async (ctx: Koa.Context) => {
       ctx.status = 404;
       ctx.body = { status: "fail to find user" };
     } else {
+      users[user.id] = user.username;
+
       const authDevice = await prisma.authenticator.findFirst({ where: { UserId: user.id, } });
       const credentialID = new Uint8Array(authDevice!.credentialID);
       const transports = JSON.parse(authDevice!.transports as string);
@@ -165,11 +168,14 @@ const VerifyUser = async (ctx: Koa.Context) => {
         },
       });
 
+      const user = { username: users[userID!] };
+
       delete challenges[userID!];
       delete devices[userID!];
+      delete users[userID!];
 
       ctx.status = 200;
-      ctx.body = { verified };
+      ctx.body = { verified, user };
     }
   } catch (err) {
     ctx.status = 409;

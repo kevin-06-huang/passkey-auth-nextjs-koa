@@ -11,7 +11,5 @@ export type KoaRequestBody = {
 };
 
 export interface IUser {
-  id: string;
   username: string;
-  otp_enabled: boolean;
 }
