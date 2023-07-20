@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
@@ -31,7 +31,7 @@ export default function Register() {
         },
         body: JSON.stringify(verifyReqBody),
       });
-      
+
       const verifyJSON = await (await verifyResp).json();
 
       if (verifyJSON && verifyJSON.verified) {

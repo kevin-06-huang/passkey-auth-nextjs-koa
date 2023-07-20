@@ -4,7 +4,7 @@ const compareUint8Arrays = (a: Uint8Array, b: Uint8Array) => {
     if (a[i] !== b[i]) return false;
   }
   return true;
-}
+};
 
 const exportObj = { compareUint8Arrays };
 

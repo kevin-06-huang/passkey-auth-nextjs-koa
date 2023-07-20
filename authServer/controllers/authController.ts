@@ -2,7 +2,7 @@ import Koa from "koa";
 import { prisma } from "../server";
 import { KoaRequestBody } from "@/types";
 
-import { 
+import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
   generateAuthenticationOptions,
@@ -16,7 +16,7 @@ import type {
   VerifyAuthenticationResponseOpts,
 } from "@simplewebauthn/server";
 
-import type { 
+import type {
   RegistrationResponseJSON,
   AuthenticationResponseJSON,
   AuthenticatorDevice,
@@ -61,7 +61,8 @@ const RegisterUser = async (ctx: Koa.Context) => {
 
 const VerifyRegistration = async (ctx: Koa.Context) => {
   try {
-    const body: RegistrationResponseJSON = ctx.request.body as RegistrationResponseJSON;
+    const body: RegistrationResponseJSON = ctx.request
+      .body as RegistrationResponseJSON;
     const { userID } = body as any;
     const challenge = challenges[userID];
 
@@ -75,18 +76,18 @@ const VerifyRegistration = async (ctx: Koa.Context) => {
 
     const verification = await verifyRegistrationResponse(opts);
     const { verified, registrationInfo } = verification;
-    
+
     if (verified && registrationInfo) {
       const { credentialPublicKey, credentialID, counter } = registrationInfo;
-      
+
       await prisma.authenticator.create({
         data: {
           credentialPublicKey: Buffer.from(credentialPublicKey.buffer),
           credentialID: Buffer.from(credentialID.buffer),
           counter,
           transports: JSON.stringify(body.response.transports),
-          UserId: userID
-        }
+          UserId: userID,
+        },
       });
 
       delete challenges[userID];
@@ -111,20 +112,24 @@ const LoginUser = async (ctx: Koa.Context) => {
     } else {
       users[user.id] = user.username;
 
-      const authDevice = await prisma.authenticator.findFirst({ where: { UserId: user.id, } });
+      const authDevice = await prisma.authenticator.findFirst({
+        where: { UserId: user.id },
+      });
       const credentialID = new Uint8Array(authDevice!.credentialID);
       const transports = JSON.parse(authDevice!.transports as string);
-      
+
       devices[user.id] = authDevice as unknown as AuthenticatorDevice;
 
       const opts: GenerateAuthenticationOptionsOpts = {
         timeout: 60000,
-        allowCredentials: [{
-          id: credentialID,
-          type: 'public-key',
-          transports: transports,
-        }],
-        userVerification: 'required',
+        allowCredentials: [
+          {
+            id: credentialID,
+            type: "public-key",
+            transports: transports,
+          },
+        ],
+        userVerification: "required",
         rpID: "localhost",
       };
 
@@ -142,10 +147,11 @@ const LoginUser = async (ctx: Koa.Context) => {
 
 const VerifyUser = async (ctx: Koa.Context) => {
   try {
-    const body: AuthenticationResponseJSON = ctx.request.body as AuthenticationResponseJSON;
+    const body: AuthenticationResponseJSON = ctx.request
+      .body as AuthenticationResponseJSON;
     const userID = body.response.userHandle;
     const challenge = challenges[userID!];
-    const authDevice = devices[userID!]
+    const authDevice = devices[userID!];
 
     const opts: VerifyAuthenticationResponseOpts = {
       response: body,
@@ -161,7 +167,7 @@ const VerifyUser = async (ctx: Koa.Context) => {
 
     if (verified) {
       await prisma.authenticator.updateMany({
-        where: { credentialID: Buffer.from(authDevice.credentialID)  },
+        where: { credentialID: Buffer.from(authDevice.credentialID) },
         data: {
           counter: authenticationInfo.newCounter,
         },

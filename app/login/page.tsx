@@ -21,20 +21,23 @@ export default function Login() {
           username: username.current!.value,
         }),
       });
-      
+
       const opts = await (await res).json();
       const verifyReqBody = await startAuthentication(opts);
-      
-      const verificationResp = await fetch("http://localhost:3500/login/verify", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+      const verificationResp = await fetch(
+        "http://localhost:3500/login/verify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(verifyReqBody),
         },
-        body: JSON.stringify(verifyReqBody),
-      });
+      );
 
       const verifyJSON = await (await verificationResp).json();
-      
+
       if (verifyJSON && verifyJSON.verified) {
         store.setAuthUser(verifyJSON.user);
         router.push("/profile");
